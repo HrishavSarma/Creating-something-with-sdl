@@ -1,32 +1,19 @@
-#include"game.h"
-
-Game* game = nullptr;
+#include "SDL.h"
 
 int main(int argc, char* argv[])
 {
-	const int FPS = 60;
-	const int framedelay = 1000 / FPS;
+	SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_Window* window = SDL_CreateWindow("Title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 400, 400, SDL_WINDOW_SHOWN);
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	Uint32 frameStart;
-	int frameTime;
+	SDL_SetRenderDrawColor(renderer, 125, 125, 125, 100);
 
-	game = new Game();
+	SDL_RenderClear(renderer);
+
+	SDL_RenderPresent(renderer);
+
+	SDL_Delay(4000);
 	
-	game->init("Game Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 658, 368, false);
-	
-	while (game->running())
-	{
-		frameStart = SDL_GetTicks();
-		game->handlevents();
-		game->update();
-		game->render();
-		frameTime = SDL_GetTicks() - frameStart;
-		if (framedelay > frameTime)
-		{
-			SDL_Delay(framedelay - frameTime);
-		}
 
-	}
-	game->clean();
 	return 0;
 }
