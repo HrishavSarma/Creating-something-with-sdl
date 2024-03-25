@@ -1,8 +1,11 @@
 #include "game.h"
+#include "textureManager.h"
+#include"GameObject.h"
 using namespace std;
 
-SDL_Texture* playerTex;
-SDL_Rect srcR, destR;
+GameObject* player;
+GameObject* enemy;
+SDL_Renderer* Game::renderer = nullptr;
 
 Game::Game()
 {}
@@ -26,7 +29,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		renderer = SDL_CreateRenderer(window, -1, 0);// -1 iin index to let sdl choose the best rendering driver and 0 for defualt behaviout of vsync and hardware acceleration
 		if (renderer)
 		{
-			SDL_SetRenderDrawColor(renderer, 125, 125, 125, 255);
+			SDL_SetRenderDrawColor(renderer, 230, 235, 180, 255);
 			cout << "Renderer Created" << endl;
 		}
 		isRunning = true;
@@ -35,9 +38,15 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
-	SDL_Surface* tmpsurface = IMG_Load("assets/player.png");
+	player = new GameObject("assets/player.png", 0, 0);
+	enemy = new GameObject("assets/enemy.png", 200, 0);
+
+	/*playerTex = TextureManager::LoadTexture("assets/player.png", renderer);
+	EnemyTex = TextureManager::LoadTexture("assets/enemy.png", renderer);*/
+
+	/* SDL_Surface* tmpsurface = IMG_Load("assets/player.png");
 	playerTex = SDL_CreateTextureFromSurface(renderer, tmpsurface);
-	SDL_FreeSurface(tmpsurface);
+	SDL_FreeSurface(tmpsurface); */
 
 }
 
@@ -57,20 +66,17 @@ void Game::handlevents()
 
 void Game::update()
 {
-	cnt++;
-	destR.h = 51;
-	destR.w = 30;
-	destR.x = cnt;
-	destR.y = cnt;
+	enemy->update();
+	player->update();
 
-	cout << cnt << endl;
 }
 
 void Game::render()
 {
 	//this is where we would stuff to render
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, playerTex, NULL, &destR);
+	enemy->render();
+	player->render();
 	SDL_RenderPresent(renderer);
 	
 }
@@ -82,5 +88,3 @@ void Game::clean()
 	SDL_Quit();
 	cout << "Game cleaned" << endl;
 }
-
-	
