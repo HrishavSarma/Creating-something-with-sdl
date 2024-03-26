@@ -7,6 +7,7 @@ using namespace std;
 
 Map* map;
 SDL_Renderer* Game::renderer = nullptr;
+SDL_Event Game::event;
 
 Manager manager;
 auto& player(manager.addEntity());
@@ -50,6 +51,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	player.addComponent<TransformComponent>(100,50);
 	player.addComponent<SpriteComponent>("assets/player.png");
+	player.addComponent<KeyboardController>();
 
 	/*playerTex = TextureManager::LoadTexture("assets/player.png", renderer);
 	EnemyTex = TextureManager::LoadTexture("assets/enemy.png", renderer);*/
@@ -62,7 +64,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 void Game::handlevents()
 {
-	SDL_Event event;
+	
 	SDL_PollEvent(&event);
 	switch (event.type)
 	{
@@ -79,12 +81,12 @@ void Game::update()
 	manager.refresh();
 	manager.update();
 
-	player.getComponent<TransformComponent>().position.Add(Vector2D(2, 2));
+	/*player.getComponent<TransformComponent>().position.Add(Vector2D(2, 2));
 
 	if (player.getComponent<TransformComponent>().position.y > 100)
 	{
 		player.getComponent<SpriteComponent>().setTex("assets/enemy.png");
-	}
+	}*/
 }
 
 void Game::render()
